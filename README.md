@@ -1,7 +1,16 @@
-# ![Igni Logo](https://github.com/igniphp/common/blob/master/logo/full.svg)
+# ![Igni logo](https://github.com/igniphp/common/blob/master/logo/full.svg)
+[![Build Status](https://travis-ci.org/igniphp/reflection-api.svg?branch=master)](https://travis-ci.org/igniphp/reflection-api)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/igniphp/reflection-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/igniphp/reflection-api/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/igniphp/reflection-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/igniphp/reflection-api/?branch=master)
 
+## Installation
+```
+composer require igniphp/reflection-api
+```
 
 ## Reflection API
+Licensed under MIT License.
+
 Reflection api provides tools that allows to:
  - read and write object's properties
  - build classes on runtime
