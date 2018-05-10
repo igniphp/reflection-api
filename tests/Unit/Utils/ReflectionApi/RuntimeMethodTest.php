@@ -45,8 +45,8 @@ class RuntimeMethodTest extends TestCase
     {
         $method = new RuntimeMethod('doSomething');
         $method->setBody(
-            '$result = $a + $b',
-            'return $result'
+            '$result = $a + $b;',
+            'return $result;'
         );
 
         self::assertSame(
@@ -72,6 +72,11 @@ class RuntimeMethodTest extends TestCase
 
     public function testAddExpression(): void
     {
+        $method = new RuntimeMethod('doSomething');
+        $method->addLine('if ($something) {');
+        $method->addLine("\techo 'test';");
+        $method->addLine('}');
 
+        self::assertSame("public function doSomething()\n{\n\tif (\$something) {\n\t\techo 'test';\n\t}\n}", $method->generateCode());
     }
 }

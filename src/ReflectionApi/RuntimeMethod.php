@@ -45,24 +45,24 @@ final class RuntimeMethod implements CodeGenerator
         return $this;
     }
 
-    public function setBody(string ...$expression): self
+    public function setBody(string ...$lines): self
     {
         if ($this->abstract) {
             throw ReflectionApiException::forAbstractMethodWithBody($this->name);
         }
 
-        $this->body = $expression;
+        $this->body = $lines;
 
         return $this;
     }
 
-    public function addExpression(string $expression): self
+    public function addLine(string $line): self
     {
         if ($this->abstract) {
             throw ReflectionApiException::forAbstractMethodWithBody($this->name);
         }
 
-        $this->body[] = $expression;
+        $this->body[] = $line;
 
         return $this;
     }
@@ -106,7 +106,7 @@ final class RuntimeMethod implements CodeGenerator
             $code .= "\n{";
 
             if ($this->body) {
-                $code .= "\n\t" . implode(";\n\t", $this->body) . ';';
+                $code .= "\n\t" . implode("\n\t", $this->body);
             }
 
             $code .= "\n}";
