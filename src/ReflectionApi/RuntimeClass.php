@@ -96,10 +96,11 @@ final class RuntimeClass implements CodeGenerator
 
     public function implements(string ...$interfaces): self
     {
-        foreach ($interfaces as $interface) {
+        foreach ($interfaces as &$interface) {
             if (!interface_exists($interface)) {
                 throw ReflectionApiException::forNonExistentInterface($interface);
             }
+            $interface = '\\' . $interface;
         }
         $this->implements = $interfaces;
 
@@ -111,17 +112,18 @@ final class RuntimeClass implements CodeGenerator
         if (!class_exists($class)) {
             throw ReflectionApiException::forNonExistentClass($class);
         }
-        $this->extends = $class;
+        $this->extends = '\\' . $class;
 
         return $this;
     }
 
     public function use(string ...$traits): self
     {
-        foreach ($traits as $trait) {
+        foreach ($traits as &$trait) {
             if (!trait_exists($trait)) {
                 throw ReflectionApiException::forNonExistentTrait($trait);
             }
+            $trait = '\\' . $trait;
         }
         $this->uses = $traits;
 
@@ -130,22 +132,17 @@ final class RuntimeClass implements CodeGenerator
 
     public function isUsing(string $name): bool
     {
-        return in_array($name, $this->uses);
-    }
-
-    public function isImplementing(string $name): bool
-    {
-        return in_array($name, $this->implements);
+        return in_array('\\' . $name, $this->uses);
     }
 
     public function isExtending(string $name): bool
     {
-        return $name === $this->extends;
+        return ('\\' . $name) === $this->extends;
     }
 
     public function implementsInterface(string $interface): bool
     {
-        return in_array($interface, $this->implements);
+        return in_array('\\' . $interface, $this->implements);
     }
 
     public function addMethod(RuntimeMethod $method): self

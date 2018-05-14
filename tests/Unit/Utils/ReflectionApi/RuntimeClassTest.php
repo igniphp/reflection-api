@@ -66,8 +66,8 @@ class RuntimeClassTest extends TestCase
         $class = new RuntimeClass('TestClassC');
         $class->implements(AInterface::class);
 
-        self::assertSame('class TestClassC implements ' . AInterface::class, explode(PHP_EOL, $class->generateCode())[0]);
-        self::assertTrue($class->isImplementing(AInterface::class));
+        self::assertSame('class TestClassC implements \\' . AInterface::class, explode(PHP_EOL, $class->generateCode())[0]);
+        self::assertTrue($class->implementsInterface(AInterface::class));
     }
 
     public function testExtends(): void
@@ -75,7 +75,7 @@ class RuntimeClassTest extends TestCase
         $class = new RuntimeClass('TestClassD');
         $class->extends(\stdClass::class);
 
-        self::assertSame('class TestClassD extends stdClass', explode(PHP_EOL, $class->generateCode())[0]);
+        self::assertSame('class TestClassD extends \stdClass', explode(PHP_EOL, $class->generateCode())[0]);
         self::assertTrue($class->isExtending(\stdClass::class));
     }
 
