@@ -40,4 +40,9 @@ class ReflectionApiException extends RuntimeException
     {
         return new self("Expression cannot be final and abstract at the same time.");
     }
+
+    public static function forUnknownType(string $type): self
+    {
+        return new self("Passed type {$type} is not recognized. Did you forgot to include it in the autoload?");
+    }
 }

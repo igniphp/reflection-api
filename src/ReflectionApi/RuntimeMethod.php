@@ -3,6 +3,7 @@
 namespace Igni\Utils\ReflectionApi;
 
 use Igni\Utils\Exception\ReflectionApiException;
+use Igni\Utils\ReflectionApi;
 
 final class RuntimeMethod implements CodeGenerator
 {
@@ -16,6 +17,8 @@ final class RuntimeMethod implements CodeGenerator
     private $body = [];
     private $name;
 
+    private const DEFAULT_TYPES = ['string', 'int', 'object', 'bool', 'float', 'array', 'callable', 'void'];
+
     public function __construct(string $name)
     {
         $this->name = $name;
@@ -28,6 +31,10 @@ final class RuntimeMethod implements CodeGenerator
 
     public function setReturnType(string $type): self
     {
+        if (!in_array($type, self::DEFAULT_TYPES) && !class_exists($type) && !interface_exists($type)) {
+            throw ReflectionApiException::forUnknownType($type);
+        }
+
         $this->returnType = $type;
 
         return $this;
@@ -97,7 +104,11 @@ final class RuntimeMethod implements CodeGenerator
 
         $code .= ')';
         if ($this->returnType) {
-            $code .= ": {$this->returnType}";
+            if (class_exists($this->returnType) || interface_exists($this->returnType)) {
+                $code .= ": \\{$this->returnType}";
+            } else {
+                $code .= ": {$this->returnType}";
+            }
         }
 
         if ($this->isAbstract()) {
